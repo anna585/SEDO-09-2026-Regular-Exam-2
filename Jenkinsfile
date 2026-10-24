@@ -1,34 +1,35 @@
-pipeline{
+pipeline {
     agent any
-    stages{
-        stage("Restore dependencies"){
+
+    triggers {
+        pollSCM('H/5 * * * *')
+    }
+
+    stages {
+        stage('Restore dependencies') {
             when {
-                anyOf {
-                    branch "main"
-                }
+                branch 'main'
             }
-            steps{
-                bat "dotnet restore"
+            steps {
+                bat 'dotnet restore'
             }
         }
-        stage("Build the project"){
+
+        stage('Build the project') {
             when {
-                anyOf {
-                    branch "main"
-                }
+                branch 'main'
             }
-            steps{
-                bat "dotnet build --no-restore"
+            steps {
+                bat 'dotnet build --no-restore'
             }
         }
-        stage("Run tests"){
+
+        stage('Run tests') {
             when {
-                anyOf {
-                    branch "main"
-                }
+                branch 'main'
             }
-            steps{
-                bat "dotnet test --no-build --verbosity normal"
+            steps {
+                bat 'dotnet test --no-build --verbosity normal'
             }
         }
     }
